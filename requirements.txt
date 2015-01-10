@@ -1,0 +1,5 @@
+beautifulsoup4==4.3.2
+requests==2.5.1
+tabulate==0.7.3
+termcolor==1.1.0
+python-digitalocean==1.2
