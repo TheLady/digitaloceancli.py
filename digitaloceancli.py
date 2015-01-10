@@ -106,8 +106,6 @@ class DigitalOcean(cmd.Cmd):
          sys.exit(0)
          
     def do_EOF(self, line):
-        """
-        """
         return True
     
     def help_ls(self):
@@ -233,19 +231,23 @@ class DigitalOcean(cmd.Cmd):
     def do_destroy(self, line):
         if self.droplet:
             destroy = False
-            while not destroy:
+            Break = True
+            while not destroy and Break:
                 sure = input("Are you sure? [y\\N]")
                 if sure.lower() == "y":
                     destroy = True
                 elif sure.lower() == "n":
-                    destroy = False
+                    Break = False
+                
                     
             if destroy:
-                self.droplet.destroy()
-                print_log("Destroy initiated successfully!", "error")
+                try:
+                    self.droplet.destroy()
+                    print_log("Destroy initiated successfully!", "error")
+                except DataReadError as err:
+                    print_log(err, "error")
             else:
-                print_log("Cancelled!", "info")
-                return True   
+                print_log("Cancelled!", "info")  
         else:
             print_log("Select a droplet first!", "error")
     
@@ -262,7 +264,6 @@ class DigitalOcean(cmd.Cmd):
                 response = input("Choice:")
                 if response.upper() == "X":
                     print_log("Cancelled.", "info")
-                    return True
                 try:    
                     image = self.manager.get_image(image_id)
                     import random
